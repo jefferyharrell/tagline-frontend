@@ -1,29 +1,30 @@
-# Dockerfile for Tagline Frontend (Next.js 15.x)
-# Multi-stage for smaller images and production best practices
+# Use an official Node runtime as a parent image
+FROM node:20-alpine
 
-# 1. Install dependencies and build
-FROM node:20-alpine AS builder
+# Set working directory
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --prefer-offline --no-audit --progress=false
+
+# Install dependencies based on the preferred package manager
+# --- Use npm ---
+# Copy package files
+COPY package.json package-lock.json* ./
+# Install dependencies (including devDependencies)
+RUN npm ci
+
+# --- Use yarn ---
+# COPY package.json yarn.lock* ./
+# RUN yarn install --frozen-lockfile
+
+# --- Use pnpm ---
+# COPY package.json pnpm-lock.yaml* ./
+# RUN corepack enable && pnpm install --frozen-lockfile
+
+# Copy the rest of the application code
+# Note: This happens *after* npm ci, so node_modules isn't copied from host
 COPY . .
-RUN npm run build
 
-# 2. Production image
-FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-
-# Install only production dependencies
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev --prefer-offline --no-audit --progress=false
-
-# Copy built app from builder
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/src ./src
-COPY --from=builder /app/next.config.* ./
-COPY --from=builder /app/package.json ./
-
+# Expose port 3000
 EXPOSE 3000
-CMD ["npm", "start"]
+
+# Command to run the app in development mode
+CMD ["npm", "run", "dev"]

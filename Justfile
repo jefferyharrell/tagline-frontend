@@ -22,8 +22,13 @@ lint:
 unit-tests:
     npx jest
 
+e2e-tests:
+    # Run Playwright E2E tests (mocked backend)
+    npx playwright test
+
 test:
     just unit-tests
+    just e2e-tests
 
 all:
     just format
@@ -36,19 +41,19 @@ clean:
 
 # Docker Compose
 up:
-    docker compose up -d tagline-frontend
+    docker compose up -d
 
 down:
-    docker compose down tagline-frontend
+    docker compose down
 
 build:
-    docker compose build tagline-frontend
+    docker compose build
 
 logs:
-    docker compose logs -f tagline-frontend
+    docker compose logs -f
 
 shell:
-    docker exec -it tagline-frontend /bin/sh
+    docker exec -it frontend /bin/sh
 
 # Clean up Docker artifacts
 prune:

@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile
+    container_name: tagline-frontend-dev
+    env_file:
+      - .env
+    volumes:
+      - ../tagline-frontend:/app # Mount source for live reload
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    command: npm run dev
