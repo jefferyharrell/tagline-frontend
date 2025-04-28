@@ -20,7 +20,7 @@ lint:
 
 # Testing
 unit-tests:
-    npx jest --passWithNoTests
+    npx jest
 
 test:
     just unit-tests
