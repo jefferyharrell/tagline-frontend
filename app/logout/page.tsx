@@ -6,8 +6,9 @@ export default function LogoutPage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/logout", { method: "POST" })
-      .then(() => router.replace("/login"));
+    fetch("/api/logout", { method: "POST" }).then(() =>
+      router.replace("/login"),
+    );
   }, [router]);
 
   return (

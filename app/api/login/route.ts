@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   if (!correctPassword) {
     return NextResponse.json(
       { detail: "Server misconfigured: password not set." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   } else {
     return NextResponse.json(
       { detail: "Incorrect password." },
-      { status: 401 }
+      { status: 401 },
     );
   }
 }
